@@ -7,14 +7,20 @@ async function findAllPaletas() {
     paletas.forEach((paleta) => {
     document.getElementById("paletaList").insertAdjacentHTML(
     "beforeend",
-    `<div class="PaletaListaItem">
+      `<div class="PaletaListaItem">
         <div>
           <div class="PaletaListaItem__sabor">${paleta.sabor}</div>
           <div class="PaletaListaItem__preco">R$ ${paleta.preco.toFixed(2)}</div>
           <div class="PaletaListaItem__descricao">${paleta.descricao}</div>
+          <div class="PaletaListaItem__acoes Acoes">
+            <button class="Acoes__editar btn" onclick="abrirModal(${paleta.id})">Editar</button>
+            <button class="Acoes__apagar btn">Apagar</button>
+          </div>
         </div>
-        <img class="PaletaListaItem__foto" src=${paleta.foto} alt=${`Paleta de ${paleta.sabor}`} /></div>`
-        );
+        <img class="PaletaListaItem__foto" src=${paleta.foto} alt=${`Paleta de ${paleta.sabor}`} />
+        
+      </div>`
+      );
     });
 
 };
@@ -42,7 +48,25 @@ async function findByIdPaletas() {
 
 findAllPaletas();
 
-function abrirModalCadastro() {
+async function abrirModal(id = null) {
+  if (id != null) {
+    document.querySelector("#title-header-modal").innerText =
+      "Atualizar uma Paleta";
+    document.querySelector("#button-form-modal").innerText = "Atualizar";
+
+    const response = await fetch(`${baseUrl}/paleta/${id}`);
+    const paleta = await response.json();
+
+    document.querySelector("#sabor").value = paleta.sabor;
+    document.querySelector("#preco").value = paleta.preco;
+    document.querySelector("#descricao").value = paleta.descricao;
+    document.querySelector("#foto").value = paleta.foto;
+    document.querySelector("#id").value = paleta.id;
+  } else {
+    document.querySelector("#title-header-modal").innerText =
+      "Cadastrar uma Paleta";
+    document.querySelector("#button-form-modal").innerText = "Cadastrar";
+  }
     document.querySelector(".modal-overlay").style.display = "flex";
 }
   
@@ -55,20 +79,26 @@ function fecharModalCadastro() {
   }
 
 async function createPaleta() {
+    const id = document.getElementById("id").value;
     let sabor = document.querySelector("#sabor").value;
     let preco = document.querySelector("#preco").value;
     let descricao = document.querySelector("#descricao").value;
     let foto = document.querySelector("#foto").value;
 
   const paleta = {
+    id,
     sabor,
     descricao,
     foto,
     preco,
   };
 
-  const response = await fetch(baseUrl + "/create", {
-    method: "post",
+  const modoEdicaoAtivado = id > 0;
+
+  const endpoint = baseUrl + (modoEdicaoAtivado ? `/update/${id}` : '/create');
+
+  const response = await fetch(endpoint, {
+    method: modoEdicaoAtivado ? "put" : "post",
     headers: {
       "Content-Type": "application/json",
     },
@@ -78,7 +108,7 @@ async function createPaleta() {
 
     const novaPaleta = await response.json();
 
-    const html = `<div class="PaletaListaItem">
+    const html = `<div class="PaletaListaItem" >
     <div>
       <div class="PaletaListaItem__sabor">${novaPaleta.sabor}</div>
       <div class="PaletaListaItem__preco">R$ ${novaPaleta.preco}</div>
@@ -89,7 +119,13 @@ async function createPaleta() {
       } alt=${`Paleta de ${novaPaleta.sabor}`} />
     </div>`;
   
-    document.getElementById("paletaList").insertAdjacentHTML("beforeend", html);
+    if (modoEdicaoAtivado) {
+      document.getElementById(`PaletaListaItem_${id}`).outerHTML = html;
+    } else {
+      document.getElementById("paletaList").insertAdjacentHTML("beforeend", html);
+    }
+
+    document.getElementById("id").value = "";
 
     fecharModalCadastro();
 };

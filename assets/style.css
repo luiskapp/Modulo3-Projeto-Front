@@ -344,14 +344,38 @@ html {
     margin: 0 auto 25px auto;
     max-width: 1110px;
 }
-.default-button{
-    padding: .5rem;
-    width: 30%;
-    font-size: 1rem;
-    background-color: transparent;
-    color: #0097ce;
-    border: solid 1px #0097ce;
-    border-radius: .3rem;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+.Acoes{
+  display: flex;
+  justify-content:space-around;
+  width: 100%;
+  margin-top: 1rem;
+}
+.btn{
+  border: none;
+  border-radius: .3rem;
+  padding: .5rem;
+  max-width: 280px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 48%;
+  transition: all 0.3s ease-in-out;
+}
+.Acoes__editar{
+  color: #0097ce;
+  border: solid 1px #0097ce;
+  background-color: transparent;
+}
+.Acoes__editar:hover{
+  color: #ffffff;
+  background-color: #0097ce;
+}
+.Acoes__apagar{
+  color: #ff0000;
+  border: solid 1px #ff0000;
+  background-color: transparent;
+}
+.Acoes__apagar:hover{
+  color: #ffffff;
+  background-color: #ff0000;
 }

@@ -23,12 +23,12 @@
                 </div>
             </div>
             <section class="button-modal-create">
-                <button type="button"  id="idPaletaButton"onclick="abrirModalCadastro()">Cadastrar Paleta</button>
+                <button type="button"  id="idPaletaButton" onclick="abrirModal()">Cadastrar Paleta</button>
             </section>
             <section class="modal-overlay" id="overlay">
                 <div class="modal">
                     <div class="modal-header">
-                        <h2>Cadastrar uma paleta</h2>
+                        <h2 id="title-header-modal">Cadastrar uma paleta</h2>
                         <a onclick="fecharModalCadastro()" class="close-modal">x</a>
                     </div>
                     <div class="modal-body">
@@ -39,7 +39,7 @@
                             <textarea type="text" name="descricao" id="descricao" placeholder="Descrição da Paleta"
                                 rows="5"></textarea>
                             <input type="text" name="foto" id="foto" placeholder="Link da Foto da Paleta">
-                            <button onclick="createPaleta()">Cadastrar</button>
+                            <button id="button-form-modal" onclick="createPaleta()">Cadastrar</button>
                         </div>
                     </div>
                 </div>
